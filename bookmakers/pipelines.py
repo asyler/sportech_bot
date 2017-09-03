@@ -5,11 +5,15 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import json
+import os
 
 
 class BookmakersPipeline(object):
     def open_spider(self, spider):
-        self.file = open(f'spider_results/{spider.name}.jl', 'w')
+        path = 'spider_results/'
+        if not os.path.exists(path):
+            os.makedirs(path)
+        self.file = open(f'{path}/{spider.name}.jl', 'w')
 
     def close_spider(self, spider):
         self.file.close()
