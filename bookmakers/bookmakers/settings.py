@@ -55,6 +55,9 @@ ROBOTSTXT_OBEY = True
 #DOWNLOADER_MIDDLEWARES = {
 #    'bookmakers.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
+DOWNLOADER_MIDDLEWARES = {
+     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 100
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -88,3 +91,8 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+LOG_ENABLED = False
+
+DEPTH_LIMIT = 10

@@ -13,6 +13,7 @@ runner = CrawlerRunner(settings)
 
 spiders = [PaddypowerSpider]
 
+# read docs
 @defer.inlineCallbacks
 def crawl():
     for spider in spiders:
@@ -25,6 +26,7 @@ reactor.run()
 
 def collect_files():
     data = {}
+    # use stats collector instead
 
     for spider in spiders:
         file = open(f'spider_results/{spider.name}.jl', 'r')
