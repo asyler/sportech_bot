@@ -22,7 +22,7 @@ class BookmakerSpider(CrawlSpider):
 
     def parse_item(self, response):
         wc = response.xpath('//*[not(self::script)][contains(text(),"World Cup 2018")]')
-        country_1 = response.xpath('//*[not(self::script)][contains(text(),"Qatar")]')
+        country_1 = response.xpath('//*[not(self::script)][contains(text(),"Ghana")]')
         country_2 = response.xpath('//*[not(self::script)][contains(text(),"Northern Ireland")]')
 
         if wc and country_1 and country_2:
@@ -31,7 +31,9 @@ class BookmakerSpider(CrawlSpider):
                 'class_': ', '.join(country_1.xpath('@class').extract())
             }
             country_label_xpath = '//{}[@class="{}"]'.format(el['name'], el['class_'])
-            odds_xpath = '{}/../{}[re:match(text(),"\d")]'.format(country_label_xpath, el['name'])
+            odds_xpath = '{}/../*[not(self::script)][re:match(text(),"\d")]'.format(country_label_xpath)
+
+            print (country_label_xpath, odds_xpath)
 
             country_labels = response.xpath(country_label_xpath+'/text()').extract()
             odds = response.xpath(odds_xpath+'/text()').extract()

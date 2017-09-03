@@ -8,12 +8,14 @@ from twisted.internet import defer, reactor
 from bookmakers.spiders.paddypower import PaddypowerSpider
 from bookmakers.spiders.williamhill import WilliamhillSpider
 from bookmakers.spiders.bet365 import Bet365Spider
+from bookmakers.spiders.skybet import SkybetSpider
 
 configure_logging()
 settings = get_project_settings()
 runner = CrawlerRunner(settings)
 
-spiders = [PaddypowerSpider, WilliamhillSpider, Bet365Spider]
+spiders = [PaddypowerSpider, WilliamhillSpider, Bet365Spider, SkybetSpider]
+# spiders = [SkybetSpider]
 
 # read docs
 @defer.inlineCallbacks
