@@ -12,3 +12,5 @@ Set environment variable `https_proxy` in format `ip:port` to use proxy.
 Use `python runner.py` to run bot once.
 
 Use `sh main.sh` to run bot with 5min interval.
+
+See `matrix.csv` for results.

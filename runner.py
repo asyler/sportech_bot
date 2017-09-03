@@ -5,12 +5,13 @@ import os
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
+from bookmakers.spiders.bet365 import Bet365Spider
 from bookmakers.spiders.paddypower import PaddypowerSpider
 from bookmakers.spiders.skybet import SkybetSpider
 from bookmakers.spiders.williamhill import WilliamhillSpider
 
 settings = get_project_settings()
-spiders = [PaddypowerSpider, SkybetSpider, WilliamhillSpider]
+spiders = [PaddypowerSpider, SkybetSpider, WilliamhillSpider, Bet365Spider]
 logger = logging.getLogger()
 
 
