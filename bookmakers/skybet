@@ -1,1 +1,0 @@
-{"url": "https://www.skybet.com/football/world-cup-2018/event/16742642", "country_label_xpath": "//span[@class=\"oc-desc\"]", "odds_xpath": "//span[@class=\"oc-desc\"]/../*[not(self::script)][re:match(text(),\"\\d\")]"}

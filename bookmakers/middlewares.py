@@ -12,7 +12,6 @@ class CustomProxyMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
-
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
@@ -21,7 +20,7 @@ class CustomProxyMiddleware(object):
         return s
 
     def process_request(self, request, spider):
-        if not getattr(spider,'need_proxy'):
+        if not getattr(spider, 'need_proxy', None):
             request.meta['proxy'] = None
 
     def process_spider_input(self, response, spider):

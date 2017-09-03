@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from scrapy import Spider, Request
 
 from .bookmakerSpider import BookmakerSpider
 

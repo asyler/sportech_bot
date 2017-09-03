@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
+import re
 import time
 
-import re
-from bookmakers.items import BookmakerOdd
 from scrapy.exceptions import CloseSpider
 from scrapy.spiders import Spider
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
-from .cachingSpider import CachingSpider
+from bookmakers.items import BookmakerOdd
 
 MAX_WAIT = 5
+
 
 def wait(fn):
     def modified_fn(*args, **kwargs):
@@ -22,12 +22,15 @@ def wait(fn):
             except (AssertionError, WebDriverException) as e:
                 if time.time() - start_time > MAX_WAIT:
                     raise e
-                time.sleep(0.1)
+                time.sleep(0.2)
+
     return modified_fn
+
 
 @wait
 def wait_for(fn):
     return fn()
+
 
 class Bet365Spider(Spider):
     name = 'bet365'
@@ -49,19 +52,23 @@ class Bet365Spider(Spider):
         return wait_for(lambda: self.browser.find_element(By.XPATH, xpath))
 
     def parse(self, response):
-        self.browser.get(response.url)
-        wait_for(lambda: self.browser.find_element_by_id('SplashContent')) # wait for load
 
-        link1 = self.wait_for('//*[not(self::script)][contains(text(),"Soccer")]')
-        link1.click()
+        try:
+            self.browser.get(response.url)
+            wait_for(lambda: self.browser.find_element_by_id('SplashContent'))  # wait for load
 
-        link2 = self.wait_for('//*[not(self::script)][contains(text(),"Outrights")]')
-        link2.click()
+            link1 = self.wait_for('//*[not(self::script)][contains(text(),"Soccer")]')
+            link1.click()
 
-        link3 = self.wait_for('//*[not(self::script)][contains(text(),"World Cup 2018")]')
-        link3.click()
+            link2 = self.wait_for('//*[not(self::script)][contains(text(),"Outrights")]')
+            link2.click()
 
-        wait_for(lambda: self.browser.find_element_by_id('Coupon'))
+            link3 = self.wait_for('//*[not(self::script)][contains(text(),"World Cup 2018")]')
+            link3.click()
+
+            wait_for(lambda: self.browser.find_element_by_id('Coupon'))
+        except (ElementNotInteractableException, WebDriverException):
+            self.logger.warning(f'{self.name}: World Cup 2018 market not found')
 
         country_1 = self.browser.find_element(By.XPATH, '//*[not(self::script)][contains(text(),"Northern Ireland")]')
 
