@@ -8,7 +8,7 @@
 from scrapy import signals
 
 
-class BookmakersSpiderMiddleware(object):
+class CustomProxyMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
@@ -19,6 +19,10 @@ class BookmakersSpiderMiddleware(object):
         s = cls()
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
+
+    def process_request(self, request, spider):
+        if not getattr(spider,'need_proxy'):
+            request.meta['proxy'] = None
 
     def process_spider_input(self, response, spider):
         # Called for each response that goes through the spider

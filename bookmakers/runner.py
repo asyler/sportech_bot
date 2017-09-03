@@ -14,8 +14,9 @@ configure_logging()
 settings = get_project_settings()
 runner = CrawlerRunner(settings)
 
-spiders = [PaddypowerSpider, WilliamhillSpider, Bet365Spider, SkybetSpider]
-# spiders = [SkybetSpider]
+# spiders = [PaddypowerSpider, WilliamhillSpider, Bet365Spider, SkybetSpider]
+spiders = [SkybetSpider]
+
 
 # read docs
 @defer.inlineCallbacks

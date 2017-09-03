@@ -1,0 +1,1 @@
+{"url": "http://sports.williamhill.com/bet/en-gb/betting/e/1644903/World+Cup+2018+%2d+Outright.html", "country_label_xpath": "//div[@class=\"eventselection\"]", "odds_xpath": "//div[@class=\"eventselection\"]/../*[not(self::script)][re:match(text(),\"\\d\")]"}

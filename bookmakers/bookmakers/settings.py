@@ -56,7 +56,8 @@ ROBOTSTXT_OBEY = True
 #    'bookmakers.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 DOWNLOADER_MIDDLEWARES = {
-     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 100
+    'bookmakers.middlewares.CustomProxyMiddleware': 42,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 100
 }
 
 # Enable or disable extensions
@@ -93,6 +94,7 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
-LOG_ENABLED = False
+LOG_LEVEL = "ERROR"
+# LOG_ENABLED = False
 
 DEPTH_LIMIT = 10

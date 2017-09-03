@@ -9,6 +9,8 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
 
+from .cachingSpider import CachingSpider
+
 MAX_WAIT = 5
 
 def wait(fn):
@@ -36,6 +38,8 @@ class Bet365Spider(Spider):
         self.browser = webdriver.Firefox()
 
         self.odd_pattern = re.compile(r"^\d")
+
+        super().__init__()
 
     def closed(self, reason):
         self.browser.quit()
@@ -72,15 +76,15 @@ class Bet365Spider(Spider):
         for country in country_labels:
             parent_el = country.find_element(By.XPATH, '..')
             country_labels_children = country.find_elements_by_xpath(".//*")
-            total_text_len = country.text
-            for child in children:
-                to
+            total_text_len = len(country.text)
+            for child in country_labels_children:
+                total_text_len -= len(child.text)
             odds_candidates = parent_el.find_elements_by_tag_name(el['name'])
             for candidate in odds_candidates:
                 match = self.odd_pattern.match(candidate.text)
                 if match:
                     odd = candidate
-                    yield BookmakerOdd(country=country_text.strip(), odd=odd.text.strip())
+                    yield BookmakerOdd(country=country.text[:total_text_len].strip(), odd=odd.text.strip())
                     break
 
         raise CloseSpider('odds found')
