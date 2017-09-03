@@ -19,14 +19,14 @@ def collect_files():
     logger.warning('producing final file')
     data = {}
 
-    for spider in spiders:
+    for i, spider in enumerate(spiders):
         with open(f'spider_results/{spider.name}.jl', 'r') as file:
             lines = file.readlines()
 
         for line in lines:
             odd_data = json.loads(line)
-            data.setdefault(odd_data['country'], [])
-            data[odd_data['country']].append(odd_data['odd'])
+            data.setdefault(odd_data['country'], ['']*len(spiders))
+            data[odd_data['country']][i] = odd_data['odd']
 
     with open('matrix.csv', 'w') as file:
 
@@ -38,7 +38,7 @@ def collect_files():
 
 
 def main():
-    logger.warning('starting..')
+    logger.warning('starting...')
 
     proxy = os.getenv('https_proxy', None)
     if proxy:
