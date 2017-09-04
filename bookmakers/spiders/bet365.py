@@ -55,11 +55,12 @@ class Bet365Spider(Spider):
 
         try:
             self.browser.get(response.url)
-            wait_for(lambda: self.browser.find_element_by_id('SplashContent'))  # wait for load
+            wait_for(lambda: self.browser.find_element_by_id('IconContainer'))  # wait for load
 
             link1 = self.wait_for('//*[not(self::script)][contains(text(),"Soccer")]')
             link1.click()
 
+            wait_for(lambda: self.browser.find_element_by_id('overlay'))
             link2 = self.wait_for('//*[not(self::script)][contains(text(),"Outrights")]')
             link2.click()
 
