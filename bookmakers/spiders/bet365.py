@@ -5,12 +5,12 @@ import time
 from scrapy.exceptions import CloseSpider
 from scrapy.spiders import Spider
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException, ElementNotInteractableException
+from selenium.common.exceptions import WebDriverException, ElementNotInteractableException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
 from bookmakers.items import BookmakerOdd
 
-MAX_WAIT = 5
+MAX_WAIT = 10
 
 
 def wait(fn):
@@ -67,7 +67,7 @@ class Bet365Spider(Spider):
             link3.click()
 
             wait_for(lambda: self.browser.find_element_by_id('Coupon'))
-        except (ElementNotInteractableException, WebDriverException):
+        except (ElementNotInteractableException, WebDriverException, NoSuchElementException):
             self.logger.warning(f'{self.name}: World Cup 2018 market not found')
 
         country_1 = self.browser.find_element(By.XPATH, '//*[not(self::script)][contains(text(),"Northern Ireland")]')
