@@ -23,6 +23,8 @@ class CachingSpider(Spider):
                 self.countries = json.loads(file.read())
             with open('settings/confidences.json') as file:
                 self.confidences = json.loads(file.read())
+            with open('settings/market.json') as file:
+                self.market_keywords = json.loads(file.read())
         except EnvironmentError:
             raise CloseSpider("can't load settings")
 

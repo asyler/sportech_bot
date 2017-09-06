@@ -11,8 +11,7 @@ from bookmakers.spiders.skybet import SkybetSpider
 from bookmakers.spiders.williamhill import WilliamhillSpider
 
 settings = get_project_settings()
-# spiders = [PaddypowerSpider, SkybetSpider, WilliamhillSpider, Bet365Spider]
-spiders = [PaddypowerSpider]
+spiders = [PaddypowerSpider, SkybetSpider, WilliamhillSpider, Bet365Spider]
 logger = logging.getLogger()
 
 

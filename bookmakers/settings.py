@@ -21,7 +21,7 @@ NEWSPIDER_MODULE = 'bookmakers.spiders'
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-# CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -91,8 +91,7 @@ ITEM_PIPELINES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
-#LOG_FORMAT = "%(message)s"
-# LOG_LEVEL = "WARNING"
-LOG_LEVEL = "ERROR"
+LOG_FORMAT = "%(message)s"
+LOG_LEVEL = "WARNING"
 
 DEPTH_LIMIT = 10
