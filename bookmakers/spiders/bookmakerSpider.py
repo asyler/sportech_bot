@@ -29,7 +29,7 @@ class BookmakerSpider(CachingSpider):
     def find_odd(self, country, country_elements):
         texts = [el.xpath('text()').extract_first().strip() for el in country_elements]
         best_match = difflib.get_close_matches(country, texts, 1, self.confidences['country_name'])
-        match_elements = [country_elements[i] for i, text in enumerate(texts) if text==best_match[0]]
+        match_elements = [country_elements[i] for i, text in enumerate(texts) if text == best_match[0]]
         for el in match_elements:
             yield el.xpath('ancestor-or-self::*')[::-1].re_first('\d+/\d+')
 
@@ -38,8 +38,9 @@ class BookmakerSpider(CachingSpider):
         for keywords in self.market_keywords:
             avg_matches = 0
             for keyword in keywords:
-                avg_matches += len(difflib.get_close_matches(keyword, all_texts, len(all_texts), self.confidences['market_name']))\
-                               +len([text for text in all_texts if keyword in text])
+                avg_matches += len(
+                    difflib.get_close_matches(keyword, all_texts, len(all_texts), self.confidences['market_name'])) \
+                               + len([text for text in all_texts if keyword in text])
             if avg_matches == 0:
                 return False
         return True

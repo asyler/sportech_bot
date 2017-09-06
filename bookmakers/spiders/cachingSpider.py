@@ -28,7 +28,6 @@ class CachingSpider(Spider):
         except EnvironmentError:
             raise CloseSpider("can't load settings")
 
-
         super().__init__(*args, **kwargs)
 
     def _log(self, message):

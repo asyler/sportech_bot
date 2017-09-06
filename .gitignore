@@ -1,6 +1,6 @@
 .idea
 *.pyc
-geckodriver.log
-*.json
+spider_results/
 *.jl
 *.csv
+*.log

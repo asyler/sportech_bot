@@ -25,7 +25,7 @@ def collect_files():
 
         for line in lines:
             odd_data = json.loads(line)
-            data.setdefault(odd_data['country'], ['']*len(spiders))
+            data.setdefault(odd_data['country'], [''] * len(spiders))
             data[odd_data['country']][i] = odd_data['odd']
 
     with open('matrix.csv', 'w') as file:
