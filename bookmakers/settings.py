@@ -91,7 +91,8 @@ ITEM_PIPELINES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
-LOG_FORMAT = "%(message)s"
-LOG_LEVEL = "WARNING"
+#LOG_FORMAT = "%(message)s"
+# LOG_LEVEL = "WARNING"
+LOG_LEVEL = "ERROR"
 
 DEPTH_LIMIT = 10

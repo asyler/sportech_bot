@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import difflib
 
 from scrapy.exceptions import CloseSpider
 from scrapy.linkextractors import LinkExtractor
@@ -9,51 +10,35 @@ from .cachingSpider import CachingSpider
 
 
 class BookmakerSpider(CachingSpider):
-    rules = (
-        Rule(
-            LinkExtractor(
-                restrict_xpaths=(
-                    '//a[contains(.,"World Cup 2018")]',
-                    '//a[contains(.,"All")]',
-                    '//a[contains(.,"Outright")]',
-                    '//a[contains(.,"Football")]',
-                )
-            ),
-            callback='parse_item', follow=True
-        ),
-    )
+    def get_all_html_elements(self, response):
+        elements = response.xpath('//*[not(self::script)]')
+        return [(el.xpath('text()').extract_first(), el) for el in elements if
+                el.xpath('text()')]
 
-    def get_odds_xpath(self, country):
-        if self.cache:
-            return self.cache['country_label_xpath'], self.cache['odds_xpath']
+    def find_countries_elements(self):
+        country_elements = {}
+        for element_text, element in self.all_elements:
+            for country in self.countries:
+                if country in element_text:
+                    country_elements.setdefault(country, [])
+                    country_elements[country].append(element)
+        return country_elements
 
-        el = {
-            'name': country.xpath('name()').extract()[0],
-            'class_': ', '.join(country.xpath('@class').extract())
-        }
-        country_label_xpath = '//{}[@class="{}"]'.format(el['name'], el['class_'])
-        odds_xpath = '{}/../*[not(self::script)][re:match(text(),"\d")]'.format(country_label_xpath)
+    def check_page_contains_countries(self):
+        return len(self.country_elements.keys())>self.confidences['number_of_countries']
 
-        return country_label_xpath, odds_xpath
+    def find_odd(self, country, country_elements):
+        texts = [el.xpath('text()').extract_first() for el in country_elements]
+        bets_match = difflib.get_close_matches(country, texts, 1)[0]
+        country_element = country_elements[texts.index(bets_match)]
+        return country_element.xpath('ancestor-or-self::*')[::-1].re_first('\d+/\d+')
 
-    def parse_item(self, response):
-        wc = response.xpath('//*[not(self::script)][contains(text(),"World Cup 2018")]')
-        country_1 = response.xpath('//*[not(self::script)][contains(text(),"Ghana")]')
-        country_2 = response.xpath('//*[not(self::script)][contains(text(),"Northern Ireland")]')
+    def parse(self, response):
+        self.all_elements = self.get_all_html_elements(response)
+        self.country_elements = self.find_countries_elements()
 
-        if wc and country_1 and country_2:
-            country_label_xpath, odds_xpath = self.get_odds_xpath(country_1)
-
-            country_labels = response.xpath(country_label_xpath + '/text()').extract()
-            odds = response.xpath(odds_xpath + '/text()').extract()
-
-            for country, odd in zip(country_labels, odds):
-                yield BookmakerOdd(country=country.strip(), odd=odd.strip())
-
-            self.save_to_cache({
-                'url': response.url,
-                'country_label_xpath': country_label_xpath,
-                'odds_xpath': odds_xpath,
-            })
+        if self.check_page_contains_countries():
+            for country, elements in self.country_elements.items():
+                yield BookmakerOdd(country=country, odd=self.find_odd(country, elements))
 
             raise CloseSpider('odds found')

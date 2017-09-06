@@ -1,9 +1,10 @@
 import json
 
-from scrapy.spiders import CrawlSpider
+from scrapy.exceptions import CloseSpider
+from scrapy.spiders import Spider
 
 
-class CachingSpider(CrawlSpider):
+class CachingSpider(Spider):
     def __init__(self, *args, **kwargs):
         self.cache = None
         try:
@@ -16,6 +17,15 @@ class CachingSpider(CrawlSpider):
                     self.parse = self.parse_item
         except EnvironmentError:
             self._log('no cache found')
+
+        try:
+            with open('settings/countries.json') as file:
+                self.countries = json.loads(file.read())
+            with open('settings/confidences.json') as file:
+                self.confidences = json.loads(file.read())
+        except EnvironmentError:
+            raise CloseSpider("can't load settings")
+
 
         super().__init__(*args, **kwargs)
 
